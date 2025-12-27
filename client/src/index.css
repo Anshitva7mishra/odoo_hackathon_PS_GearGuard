@@ -21,6 +21,25 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Hide scrollbar but keep scroll functionality */
+
+/* Chrome, Safari, Edge */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: none;
+}
+
+/* Internet Explorer / old Edge */
+* {
+  -ms-overflow-style: none;
+}
+
+
 .bg-base {
   background-color: var(--bg-base);
 }
@@ -63,3 +82,4 @@ body {
 .border-muted {
   border: 1px solid var(--text-secondary);
 }
+
