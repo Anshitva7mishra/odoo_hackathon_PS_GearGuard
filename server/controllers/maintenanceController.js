@@ -14,14 +14,15 @@ export const createLog = async (req, res) => {
     const log = await Maintenance.create({
       equipmentId,
       technicianId: req.user.id,
+      teamId: equipment.teamId,
       type,
       description,
       hoursSpent,
       status,
     });
 
-    if (status === "Completed" && type === "Repair") {
-      equipment.status = "Operational";
+    if (status === "Scrap") {
+      equipment.status = "Down";
       await equipment.save();
     }
 
@@ -32,21 +33,17 @@ export const createLog = async (req, res) => {
 };
 
 export const getLogsByMachine = async (req, res) => {
-  try {
-    const logs = await Maintenance.findAll({
-      where: { equipmentId: req.params.equipmentId },
-      include: [
-        {
-          model: User,
-          as: "technician",
-          attributes: ["id", "name", "email"],
-        },
-      ],
-      order: [["createdAt", "DESC"]],
-    });
+  const logs = await Maintenance.findAll({
+    where: { equipmentId: req.params.equipmentId },
+    include: [
+      {
+        model: User,
+        as: "technician",
+        attributes: ["id", "name", "email"],
+      },
+    ],
+    order: [["createdAt", "DESC"]],
+  });
 
-    res.json(logs);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+  res.json(logs);
 };

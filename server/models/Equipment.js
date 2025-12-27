@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import MaintenanceTeam from "./MaintenanceTeam.js";
 
 const Equipment = sequelize.define(
   "Equipment",
@@ -30,11 +31,20 @@ const Equipment = sequelize.define(
       type: DataTypes.ENUM("Operational", "Under Maintenance", "Down"),
       defaultValue: "Operational",
     },
+
+    teamId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
   },
   {
     tableName: "Equipment",
     timestamps: true,
   }
 );
+
+
+Equipment.belongsTo(MaintenanceTeam, { foreignKey: "teamId" });
+MaintenanceTeam.hasMany(Equipment, { foreignKey: "teamId" });
 
 export default Equipment;

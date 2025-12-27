@@ -1,5 +1,8 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import User from "./User.js";
+import Equipment from "./Equipment.js";
+import MaintenanceTeam from "./MaintenanceTeam.js";
 
 const Maintenance = sequelize.define(
   "Maintenance",
@@ -26,8 +29,8 @@ const Maintenance = sequelize.define(
     },
 
     status: {
-      type: DataTypes.ENUM("Pending", "In Progress", "Completed"),
-      defaultValue: "Pending",
+      type: DataTypes.ENUM("New", "In Progress", "Completed", "Scrap"),
+      defaultValue: "New",
     },
 
     technicianId: {
@@ -39,10 +42,31 @@ const Maintenance = sequelize.define(
       type: DataTypes.UUID,
       allowNull: false,
     },
+
+    teamId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
   },
   {
     timestamps: true,
   }
 );
+
+
+Maintenance.belongsTo(User, {
+  foreignKey: "technicianId",
+  as: "technician",
+});
+
+Maintenance.belongsTo(Equipment, {
+  foreignKey: "equipmentId",
+});
+
+Maintenance.belongsTo(MaintenanceTeam, {
+  foreignKey: "teamId",
+});
+
+MaintenanceTeam.hasMany(Maintenance, { foreignKey: "teamId" });
 
 export default Maintenance;

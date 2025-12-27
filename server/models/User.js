@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 import bcrypt from "bcryptjs";
+import MaintenanceTeam from "./MaintenanceTeam.js";
 
 const User = sequelize.define(
   "User",
@@ -10,23 +11,31 @@ const User = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
+
     name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
+
     email: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
-      validate: { isEmail: true },
     },
+
     password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
+
     role: {
       type: DataTypes.ENUM("Admin", "Manager", "Technician"),
       defaultValue: "Technician",
+    },
+
+    teamId: {
+      type: DataTypes.UUID,
+      allowNull: true,
     },
   },
   {
@@ -34,15 +43,18 @@ const User = sequelize.define(
   }
 );
 
+
+User.belongsTo(MaintenanceTeam, { foreignKey: "teamId" });
+MaintenanceTeam.hasMany(User, { foreignKey: "teamId" });
+
+
 User.beforeCreate(async (user) => {
-  if (user.password) {
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(user.password, salt);
-  }
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt);
 });
 
 User.prototype.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
+  return bcrypt.compare(enteredPassword, this.password);
 };
 
 export default User;
