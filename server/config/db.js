@@ -25,8 +25,6 @@ export const connectDB = async () => {
   try {
     await sequelize.authenticate();
     console.log("✅ Neon (PostgreSQL) Connected Successfully");
-    await sequelize.sync({ alter: true });
-    console.log("✅ Database Synced");
   } catch (error) {
     console.error("❌ Database Connection Error:", error.message);
     process.exit(1);

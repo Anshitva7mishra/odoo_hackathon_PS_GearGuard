@@ -16,7 +16,9 @@ export const getDashboardStats = async (req, res) => {
       where: { role: "Technician" },
     });
 
-    const operationalMachines = totalEquipment - activeMaintenance;
+    const operationalMachines = await Equipment.count({
+      where: { status: "Operational" },
+    });
 
     res.json({
       totalEquipment,
@@ -29,7 +31,6 @@ export const getDashboardStats = async (req, res) => {
 
     res.status(500).json({
       message: "Server Error: Could not fetch dashboard statistics",
-      error: error.message,
     });
   }
 };

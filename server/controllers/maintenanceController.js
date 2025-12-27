@@ -35,9 +35,16 @@ export const getLogsByMachine = async (req, res) => {
   try {
     const logs = await Maintenance.findAll({
       where: { equipmentId: req.params.equipmentId },
-      include: [{ model: User, attributes: ["name"] }],
+      include: [
+        {
+          model: User,
+          as: "technician",
+          attributes: ["id", "name", "email"],
+        },
+      ],
       order: [["createdAt", "DESC"]],
     });
+
     res.json(logs);
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -7,10 +7,7 @@ import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-
 router.post("/", protect, createLog);
-
-
 router.get("/:equipmentId", protect, getLogsByMachine);
 
 export default router;
