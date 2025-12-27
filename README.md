@@ -81,17 +81,6 @@ For routine servicing:
 
 ---
 
-## 🎨 Built for Odoo Users
-
-GearGuard feels instantly familiar:
-
-* **Kanban Boards** for drag-and-drop task management
-* **Avatars & alerts** for ownership and urgency
-* **Smart Buttons** showing equipment maintenance history
-* **Dashboards & reports** for leadership insight
-
----
-
 ## 🤖 Automation That Thinks Ahead
 
 ### 🗑️ Scrap Protection Logic
