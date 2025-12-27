@@ -134,3 +134,7 @@ GearGuard is a full-stack maintenance management system built using modern, scal
 
 
 ---
+
+## Database Table Images
+<img width="1919" height="971" alt="image" src="https://github.com/user-attachments/assets/8605acb9-1b13-458e-ba8f-9c1cc3bd7597" />
+
