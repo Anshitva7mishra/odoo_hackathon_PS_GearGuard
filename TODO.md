@@ -1,0 +1,1 @@
+- [x] Uncomment the ProtectedRoute wrapper for the Dashboard route in AppRoutes.jsx to ensure proper authentication and navigation from dashboard to other pages.
