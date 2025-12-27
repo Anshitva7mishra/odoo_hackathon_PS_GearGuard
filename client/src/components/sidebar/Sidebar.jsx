@@ -133,16 +133,13 @@ const MOCK_CONFIG = {
 export default function Sidebar() {
   const { user } = useAuthStore();
 
-  // 🛡️ CRITICAL FIXES HERE:
-  // 1. Guard Clause: If user is null (loading/logged out), render nothing immediately.
+ 
   if (!user) return null;
 
-  // 2. Safe Role Access:
-  //    - checks if user.role exists
-  //    - converts to lowerCase ("Admin" -> "admin") to match MOCK_CONFIG keys
+  
   const roleKey = user.role ? user.role.toLowerCase() : "technician";
 
-  // 3. Fallback: If roleKey is invalid, return empty array to prevent map crash
+ 
   const items = MOCK_CONFIG[roleKey] || [];
 
   return (
@@ -151,7 +148,7 @@ export default function Sidebar() {
                       w-20 lg:w-64 bg-[#0F172A] border-r border-white/5 
                       transition-all duration-300 ease-in-out"
     >
-      {/* SIDEBAR HEADER - LOGO ICON ONLY */}
+      
       <div className="flex items-center justify-center lg:justify-start lg:px-6 h-16 md:h-20 border-b border-white/5">
         <div className="p-2 bg-teal-400/10 rounded-xl text-teal-400">
           <Wrench size={18} strokeWidth={3} />
@@ -161,10 +158,10 @@ export default function Sidebar() {
         </span>
       </div>
 
-      {/* NAVIGATION */}
+      
       <nav className="flex-1 px-3 py-6 space-y-2 overflow-y-auto no-scrollbar">
         {items.map((item) => {
-          // Safety Check: Ensure the icon exists in ICON_MAP, fallback to Wrench if missing
+         
           const Icon = ICON_MAP[item.icon] || Wrench;
 
           return (
@@ -194,7 +191,7 @@ export default function Sidebar() {
                     {item.label}
                   </span>
 
-                  {/* Active Indicator (Desktop) */}
+                  
                   {isActive && (
                     <motion.div
                       layoutId="sidebarActive"
@@ -202,7 +199,7 @@ export default function Sidebar() {
                     />
                   )}
 
-                  {/* Mobile Tooltip */}
+                 
                   <div
                     className="lg:hidden absolute left-full ml-4 px-3 py-2 bg-slate-800 text-white text-[10px] uppercase font-bold rounded-md 
                                   opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-60 shadow-xl border border-white/10"
@@ -216,7 +213,7 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* FOOTER STATUS */}
+      
       <div className="p-4 border-t border-white/5 hidden lg:block">
         <div className="bg-slate-800/30 rounded-xl p-3 border border-white/5">
           <div className="flex items-center gap-2">
