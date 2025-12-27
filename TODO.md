@@ -1,0 +1,3 @@
+- [x] Replace the placeholder in MaintenanceCalendar.jsx with a visual timeline component
+- [x] Display tasks from the store in a timeline format with task names, times, equipment, and priorities
+- [x] Ensure the timeline looks populated and not empty for managers

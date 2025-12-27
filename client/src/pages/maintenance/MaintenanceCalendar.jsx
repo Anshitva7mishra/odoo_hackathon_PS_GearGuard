@@ -84,16 +84,72 @@ if (role !== "manager") {
 
       {/* --- CALENDAR GRID INTERFACE --- */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Left: Interactive Grid Placeholder (Responsive 320px) */}
-        <div className="lg:col-span-8 bg-surface/30 border border-white/5 rounded-[2.5rem] p-6 h-75 md:h-112.5 flex flex-col items-center justify-center border-dashed relative group overflow-hidden">
+        {/* Left: Visual Timeline */}
+        <div className="lg:col-span-8 bg-surface/30 border border-white/5 rounded-[2.5rem] p-6 h-75 md:h-112.5 overflow-y-auto relative group">
           <div className="absolute inset-0 bg-brand/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-          <CalendarIcon size={64} className="text-white/5 mb-4 animate-pulse" />
-          <p className="text-secondary uppercase tracking-[0.5em] text-[10px] font-black text-center px-4 leading-loose">
-            Visual Timeline Stream <br />
-            <span className="text-brand/40 italic">
-              Waiting for Neural Sync...
-            </span>
-          </p>
+          <div className="flex items-center gap-2 mb-6">
+            <CalendarIcon size={14} className="text-brand" />
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-primary">
+              Visual Timeline Stream
+            </h3>
+          </div>
+
+          <div className="space-y-6">
+            {tasks.length > 0 ? (
+              tasks.map((task, idx) => (
+                <motion.div
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: idx * 0.1 }}
+                  key={task.id}
+                  className="flex items-start gap-4 relative"
+                >
+                  {/* Timeline Line */}
+                  <div className="flex flex-col items-center">
+                    <div className={`w-3 h-3 rounded-full border-2 ${
+                      task.priority === 'High' ? 'bg-red-500 border-red-400' : 'bg-brand border-brand/60'
+                    }`} />
+                    {idx < tasks.length - 1 && (
+                      <div className="w-px h-16 bg-white/10 mt-2" />
+                    )}
+                  </div>
+
+                  {/* Task Card */}
+                  <div className="flex-1 bg-surface border border-white/5 rounded-2xl p-4 hover:border-brand/40 hover:bg-white/5 transition-all cursor-pointer shadow-lg">
+                    <div className="flex items-start justify-between">
+                      <div className="min-w-0 flex-1">
+                        <h4 className="text-sm font-bold text-primary truncate">
+                          {task.name}
+                        </h4>
+                        <div className="flex items-center gap-4 mt-2 text-[9px] text-secondary font-mono uppercase tracking-tighter">
+                          <div className="flex items-center gap-1">
+                            <Clock size={10} />
+                            {task.time || "Scheduled"}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Zap size={10} />
+                            {task.equipment}
+                          </div>
+                        </div>
+                      </div>
+                      <div className={`px-2 py-1 rounded-full text-[8px] font-black uppercase ${
+                        task.priority === 'High' ? 'bg-red-500/20 text-red-400' : 'bg-brand/20 text-brand'
+                      }`}>
+                        {task.priority}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <div className="flex flex-col items-center justify-center py-20">
+                <CalendarIcon size={48} className="text-white/5 mb-4 animate-pulse" />
+                <p className="text-secondary uppercase tracking-[0.5em] text-[10px] font-black text-center px-4 leading-loose">
+                  No Missions Scheduled
+                </p>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Right: Agenda Sidebar */}
