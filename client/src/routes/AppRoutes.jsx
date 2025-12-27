@@ -11,7 +11,7 @@ import ResetPassword from "../pages/public/ResetPassword";
 
 // Protected common pages
 import Dashboard from "../pages/dashboard/Dashboard";
-import MaintenanceKanban from "../pages/maintenance/MaintenanceKanban";
+import Maintenance from "../pages/maintenance/Maintenance";
 import AccountSettings from "../pages/settings/AccountSettings";
 
 // Reports (Manager/Admin)
@@ -41,9 +41,9 @@ export default function AppRoutes() {
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute allowedRoles={["technician", "manager", "admin"]}>
+            // <ProtectedRoute allowedRoles={["technician", "manager", "admin"]}>
               <Dashboard />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         />
 
@@ -52,11 +52,10 @@ export default function AppRoutes() {
           path="/maintenance"
           element={
             <ProtectedRoute allowedRoles={["technician", "manager", "admin"]}>
-              <MaintenanceKanban />
+              <Maintenance />
             </ProtectedRoute>
           }
         />
-
         {/* Equipment */}
         <Route
           path="/equipment"

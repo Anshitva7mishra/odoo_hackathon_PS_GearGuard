@@ -10,9 +10,9 @@ import {
   Calendar,
   BarChart3,
 } from "lucide-react";
-
 import { useAuthStore } from "../../store/authStore";
 
+/* ---------------- ICON MAP ---------------- */
 const ICON_MAP = {
   dashboard: LayoutDashboard,
   tasks: ClipboardList,
@@ -24,131 +24,49 @@ const ICON_MAP = {
   chart: BarChart3,
 };
 
+/* ---------------- SIDEBAR CONFIG ---------------- */
 const MOCK_CONFIG = {
   technician: [
-    {
-      label: "Dashboard",
-      path: "/dashboard",
-      icon: "dashboard",
-    },
-    {
-      label: "My Tasks",
-      path: "/maintenance",
-      icon: "tasks",
-    },
-    {
-      label: "Equipment",
-      path: "/equipment",
-      icon: "wrench",
-    },
-    {
-      label: "Account Settings",
-      path: "/settings",
-      icon: "settings",
-    },
+    { label: "Dashboard", path: "/dashboard", icon: "dashboard" },
+    { label: "My Tasks", path: "/maintenance", icon: "tasks" },
+    { label: "Equipment", path: "/equipment", icon: "wrench" },
+    { label: "Account Settings", path: "/settings", icon: "settings" },
   ],
 
   manager: [
-    {
-      label: "Dashboard",
-      path: "/dashboard",
-      icon: "dashboard",
-    },
-    {
-      label: "Maintenance",
-      path: "/maintenance",
-      icon: "tasks",
-    },
-    {
-      label: "Maintenance Calendar",
-      path: "/maintenance/calendar",
-      icon: "calendar",
-    },
-    {
-      label: "Equipment",
-      path: "/equipment",
-      icon: "wrench",
-    },
-    {
-      label: "Teams",
-      path: "/teams",
-      icon: "users",
-    },
-    {
-      label: "Reports",
-      path: "/reports",
-      icon: "chart",
-    },
-    {
-      label: "Account Settings",
-      path: "/settings",
-      icon: "settings",
-    },
+    { label: "Dashboard", path: "/dashboard", icon: "dashboard" },
+    { label: "Maintenance", path: "/maintenance", icon: "tasks" },
+    { label: "Equipment", path: "/equipment", icon: "wrench" },
+    { label: "Account Settings", path: "/settings", icon: "settings" },
   ],
 
   admin: [
-    {
-      label: "Dashboard",
-      path: "/dashboard",
-      icon: "dashboard",
-    },
-    {
-      label: "Maintenance",
-      path: "/maintenance",
-      icon: "tasks",
-    },
-    {
-      label: "Equipment",
-      path: "/equipment",
-      icon: "wrench",
-    },
-    {
-      label: "Teams",
-      path: "/teams",
-      icon: "users",
-    },
-    {
-      label: "Reports",
-      path: "/reports",
-      icon: "chart",
-    },
-    {
-      label: "User Management",
-      path: "/users",
-      icon: "users",
-    },
-    {
-      label: "System Configuration",
-      path: "/config",
-      icon: "security",
-    },
-    {
-      label: "Account Settings",
-      path: "/settings",
-      icon: "settings",
-    },
+    { label: "Dashboard", path: "/dashboard", icon: "dashboard" },
+    { label: "Maintenance", path: "/maintenance", icon: "tasks" },
+    { label: "Equipment", path: "/equipment", icon: "wrench" },
+    { label: "Reports", path: "/reports", icon: "chart" },
+    {label: "Config", path: "/config", icon: "tasks"},
+    { label: "Account Settings", path: "/settings", icon: "settings" },
   ],
 };
 
+/* ---------------- SIDEBAR ---------------- */
 export default function Sidebar() {
   const { user } = useAuthStore();
 
- 
-  if (!user) return null;
+  /* 🔐 STRICT BACKEND ALIGNMENT */
+  if (!user?.role) return null;
 
-  
-  const roleKey = user.role ? user.role.toLowerCase() : "technician";
-
- 
+  const roleKey = user.role.toLowerCase();
   const items = MOCK_CONFIG[roleKey] || [];
 
   return (
     <aside
-      className="fixed left-0 top-0 h-screen z-40 flex flex-col 
-                      w-20 lg:w-64 bg-[#0F172A] border-r border-white/5 
-                      transition-all duration-300 ease-in-out"
+      className="fixed left-0 top-0 h-screen z-40 flex flex-col
+                 w-20 lg:w-64 bg-[#0F172A] border-r border-white/5
+                 transition-all duration-300 ease-in-out"
     >
-      
+      {/* LOGO */}
       <div className="flex items-center justify-center lg:justify-start lg:px-6 h-16 md:h-20 border-b border-white/5">
         <div className="p-2 bg-teal-400/10 rounded-xl text-teal-400">
           <Wrench size={18} strokeWidth={3} />
@@ -158,24 +76,22 @@ export default function Sidebar() {
         </span>
       </div>
 
-      
+      {/* NAVIGATION */}
       <nav className="flex-1 px-3 py-6 space-y-2 overflow-y-auto no-scrollbar">
         {items.map((item) => {
-         
           const Icon = ICON_MAP[item.icon] || Wrench;
 
           return (
             <NavLink
               key={item.path}
               to={item.path}
-              className={({ isActive }) => `
-                group relative flex items-center gap-4 px-3 py-3 rounded-xl transition-all duration-200
-                ${
+              className={({ isActive }) =>
+                `group relative flex items-center gap-4 px-3 py-3 rounded-xl transition-all duration-200 ${
                   isActive
                     ? "bg-teal-400/10 text-teal-400"
                     : "text-slate-400 hover:text-white hover:bg-white/5"
-                }
-              `}
+                }`
+              }
             >
               {({ isActive }) => (
                 <>
@@ -191,7 +107,6 @@ export default function Sidebar() {
                     {item.label}
                   </span>
 
-                  
                   {isActive && (
                     <motion.div
                       layoutId="sidebarActive"
@@ -199,10 +114,12 @@ export default function Sidebar() {
                     />
                   )}
 
-                 
+                  {/* Mobile Tooltip */}
                   <div
-                    className="lg:hidden absolute left-full ml-4 px-3 py-2 bg-slate-800 text-white text-[10px] uppercase font-bold rounded-md 
-                                  opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-60 shadow-xl border border-white/10"
+                    className="lg:hidden absolute left-full ml-4 px-3 py-2 bg-slate-800 text-white text-[10px]
+                               uppercase font-bold rounded-md opacity-0 pointer-events-none
+                               group-hover:opacity-100 transition-opacity z-60
+                               shadow-xl border border-white/10"
                   >
                     {item.label}
                   </div>
@@ -213,7 +130,7 @@ export default function Sidebar() {
         })}
       </nav>
 
-      
+      {/* FOOTER STATUS */}
       <div className="p-4 border-t border-white/5 hidden lg:block">
         <div className="bg-slate-800/30 rounded-xl p-3 border border-white/5">
           <div className="flex items-center gap-2">
