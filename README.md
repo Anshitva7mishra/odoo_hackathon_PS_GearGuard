@@ -103,4 +103,34 @@ If a repair is marked as **Scrap**:
 
 **GearGuard doesn’t just manage maintenance — it prevents chaos.**
 
+## 🛠️ Tech Stack – GearGuard
+GearGuard is a full-stack maintenance management system built using modern, scalable, and industry-standard technologies.
+
+🎨 Frontend - Responsible for user interface, user experience, and client-side interactions.
+
+* React.js – Component-based frontend framework
+* Tailwind CSS – Utility-first CSS for responsive UI
+* React Beautiful DnD – Drag-and-drop Kanban workflow
+* FullCalendar – Preventive maintenance scheduling
+* Redux Toolkit / Zustand – State management
+
+⚙️ Backend - Handles business logic, workflows, and API services.
+
+* Node.js – JavaScript runtime
+* Express.js – REST API framework
+* JWT (JSON Web Tokens) – Authentication
+
+🗄️ Database - Stores equipment, maintenance requests, users, and teams.
+
+* PostgreSQL – Relational database
+
+
+🔐 Authentication & Authorization - Secure access control across the application.
+
+* Email & Password Authentication
+* JWT Access & Refresh Tokens
+* Role-based permissions (Admin, Manager, Technician)
+* Team-based request access
+
+
 ---
