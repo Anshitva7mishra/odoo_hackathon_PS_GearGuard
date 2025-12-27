@@ -20,7 +20,7 @@ const TEMP_USERS = {
   technician: {
     email: "tech@gearguard.com",
     password: "tech@123",
-    label: "Tech", // Shortened for mobile
+    label: "Tech",
     fullLabel: "Technician",
     icon: <Wrench size={16} />,
     hint: "Field maintenance & repair logs",
