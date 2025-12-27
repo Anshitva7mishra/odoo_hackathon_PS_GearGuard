@@ -135,6 +135,98 @@ GearGuard is a full-stack maintenance management system built using modern, scal
 
 ---
 
-## Database Table Images
-<img width="1919" height="971" alt="image" src="https://github.com/user-attachments/assets/8605acb9-1b13-458e-ba8f-9c1cc3bd7597" />
+## 🗄️ Database Schema & Tables
+
+This section illustrates the core database structure used in **GearGuard**.  
+The schema is designed to ensure **data integrity**, **clear relationships**, and **scalability** for maintenance workflows.
+
+### 📌 Overview
+GearGuard uses a **relational PostgreSQL database (Neon)** with the following core tables:
+
+- **Users** – System users with role-based access (Admin, Manager, Technician)
+- **MaintenanceTeams** – Logical grouping of maintenance staff
+- **Equipment** – Physical assets owned by the organization
+- **Maintenances** – Maintenance logs and work records
+
+---
+
+### 📊 Database Tables
+
+#### 🧑 Users Table
+Stores authentication and role information for all users.
+
+**Fields**
+- `id` (UUID, Primary Key)
+- `name`
+- `email`
+- `password` (hashed)
+- `role`
+- `teamId` (Foreign Key → MaintenanceTeams)
+
+<img width="1600" height="790" alt="image" src="https://github.com/user-attachments/assets/460af5fe-438b-40e8-87d0-59b6e80ba95a" />
+
+
+---
+
+#### 👥 MaintenanceTeams Table
+Represents maintenance teams responsible for handling equipment.
+
+**Fields**
+- `id` (UUID, Primary Key)
+- `name`
+- `description`
+
+<img width="1600" height="718" alt="image" src="https://github.com/user-attachments/assets/ad6a76f6-8e28-4d5e-9f93-067fd17bae35" />
+
+
+---
+
+#### 🏭 Equipment Table
+Stores all company assets and their operational status.
+
+**Fields**
+- `id` (UUID, Primary Key)
+- `name`
+- `serialNumber`
+- `location`
+- `status`
+- `teamId` (Foreign Key → MaintenanceTeams)
+
+<img width="1600" height="771" alt="image" src="https://github.com/user-attachments/assets/d9d9e6e7-a2ca-4a68-8083-db5e34078d5f" />
+
+
+---
+
+#### 🛠️ Maintenances Table
+Tracks all maintenance activities performed on equipment.
+
+**Fields**
+- `id` (UUID, Primary Key)
+- `type` (Inspection / Repair / Replacement)
+- `description`
+- `hoursSpent`
+- `status`
+- `technicianId` (Foreign Key → Users)
+- `equipmentId` (Foreign Key → Equipment)
+- `teamId` (Foreign Key → MaintenanceTeams)
+
+<img width="1600" height="544" alt="image" src="https://github.com/user-attachments/assets/a1274f62-20e1-4542-b820-b71143f8e87b" />
+
+
+---
+
+### 🔗 Relationship Summary
+
+- One **Maintenance Team** can have many **Users**
+- One **Maintenance Team** can manage many **Equipment**
+- One **Equipment** can have many **Maintenance Logs**
+- One **User (Technician)** can perform many **Maintenance Tasks**
+
+This relational design enables:
+- Role-based workflows
+- Accurate maintenance history tracking
+- Easy future extension for analytics and automation
+
+---
+
 
