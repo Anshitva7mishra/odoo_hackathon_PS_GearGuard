@@ -6,18 +6,12 @@ const generateToken = (id, role) => {
 };
 
 export const loginUser = async (req, res) => {
-  const { email, password, role } = req.body;
+  const { email, password } = req.body;
 
   try {
     const user = await User.findOne({ where: { email } });
 
     if (user && (await user.matchPassword(password))) {
-      if (user.role !== role) {
-        return res.status(403).json({
-          message: `Access Denied: This account does not have ${role} privileges.`,
-        });
-      }
-
       res.json({
         id: user.id,
         name: user.name,

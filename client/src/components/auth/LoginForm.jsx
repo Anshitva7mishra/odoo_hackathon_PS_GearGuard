@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Mail,
@@ -16,26 +16,26 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
 import { roleRedirect } from "../../utils/roleRedirect";
 
-const TEMP_USERS = {
+const DEMO_CREDENTIALS = {
   technician: {
     email: "tech@gearguard.com",
-    password: "tech@123",
-    label: "Tech", // Shortened for mobile
+    password: "password123",
+    label: "Tech",
     fullLabel: "Technician",
     icon: <Wrench size={16} />,
     hint: "Field maintenance & repair logs",
   },
   manager: {
     email: "manager@gearguard.com",
-    password: "manager@123",
+    password: "password123",
     label: "Manager",
     fullLabel: "Manager",
     icon: <User size={16} />,
     hint: "Schedules & resource planning",
   },
   admin: {
-    email: "admin@gearguard.com",
-    password: "admin@123",
+    email: "anshitvam@gmail.com",
+    password: "mishra@n@",
     label: "Admin",
     fullLabel: "Admin",
     icon: <UserCog size={16} />,
@@ -44,45 +44,41 @@ const TEMP_USERS = {
 };
 
 export default function LoginForm() {
-  const login = useAuthStore((s) => s.login);
+  const { login, isLoading, error, user } = useAuthStore();
   const navigate = useNavigate();
 
-  const [activeRole, setActiveRole] = useState("technician");
+  const [activeTab, setActiveTab] = useState("admin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
-  const role = TEMP_USERS[activeRole];
+  const activeRoleData = DEMO_CREDENTIALS[activeTab];
+
+  useEffect(() => {
+    if (user) {
+      navigate(roleRedirect(user.role));
+    }
+  }, [user, navigate]);
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setIsLoading(true);
-    setError("");
-    await new Promise((resolve) => setTimeout(resolve, 800));
 
-    if (email !== role.email || password !== role.password) {
-      setError(`Invalid credentials for ${role.fullLabel} access.`);
-      setIsLoading(false);
-      return;
+    const success = await login(email, password);
+
+    if (success) {
+      const freshUser = useAuthStore.getState().user;
+      navigate(roleRedirect(freshUser.role));
     }
-
-    login(activeRole);
-    navigate(roleRedirect(activeRole));
   }
 
   const fillCredentials = () => {
-    setEmail(role.email);
-    setPassword(role.password);
+    setEmail(activeRoleData.email);
+    setPassword(activeRoleData.password);
   };
 
   return (
-    // Added overflow-y-auto to handle short landscape mobile screens
     <div className="min-h-dvh bg-[#0F172A] flex items-center justify-center p-0 sm:p-4 md:p-6 font-sans overflow-y-auto">
-      {/* Container: Full width on mobile, max-width on desktop */}
       <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 bg-slate-900/50 sm:rounded-3xl overflow-hidden border-y sm:border border-white/10 shadow-2xl">
-        {/* LEFT SECTION: VISUAL (Desktop Only) */}
         <div className="relative hidden lg:flex flex-col justify-between p-12 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <img
@@ -118,34 +114,23 @@ export default function LoginForm() {
           </div>
         </div>
 
-        {/* RIGHT SECTION: FORM */}
         <div className="p-6 sm:p-8 md:p-12 bg-slate-900 flex flex-col justify-center min-h-dvh sm:min-h-0">
-          {/* Mobile Logo: Only visible on small screens */}
-          <div className="lg:hidden flex items-center gap-2 text-teal-400 font-bold text-xl mb-8">
-            <div className="p-1.5 bg-teal-400/10 rounded-lg">
-              <Wrench size={20} />
-            </div>
-            GearGuard
-          </div>
-
           <div className="mb-6 md:mb-8">
             <h1 className="text-2xl font-bold text-white mb-1">Welcome Back</h1>
             <p className="text-slate-400 text-sm sm:text-base">
-              Select your workspace to continue
+              Select your role to auto-fill (Demo Mode)
             </p>
           </div>
 
-          {/* ROLE TABS: Responsive text sizes */}
           <div className="flex p-1 bg-slate-800 rounded-xl mb-6 md:mb-8 relative">
-            {Object.entries(TEMP_USERS).map(([key, r]) => {
-              const isActive = activeRole === key;
+            {Object.entries(DEMO_CREDENTIALS).map(([key, r]) => {
+              const isActive = activeTab === key;
               return (
                 <button
                   key={key}
                   type="button"
                   onClick={() => {
-                    setActiveRole(key);
-                    setError("");
+                    setActiveTab(key);
                     setEmail("");
                     setPassword("");
                   }}
@@ -202,7 +187,7 @@ export default function LoginForm() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder={role.email}
+                  placeholder={activeRoleData.email}
                   className="w-full bg-slate-800 border border-slate-700 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-teal-400/20 focus:border-teal-400 transition-all text-sm sm:text-base"
                   required
                 />
@@ -256,28 +241,27 @@ export default function LoginForm() {
                 <Loader2 className="animate-spin" size={20} />
               ) : (
                 <>
-                  Sign In as {role.label}
+                  Sign In
                   <ArrowRight size={18} />
                 </>
               )}
             </motion.button>
           </form>
 
-          {/* DEMO TIP: Responsive margins */}
           <div className="mt-6 md:mt-8 p-4 bg-slate-800/50 border border-slate-700 rounded-2xl">
             <div className="flex items-start gap-3">
               <div className="p-2 bg-blue-500/10 text-blue-400 rounded-lg shrink-0">
                 <User size={16} />
               </div>
               <div className="flex-1 overflow-hidden">
-                <p className="text-xs text-slate-300 font-medium leading-tight truncate sm:whitespace-normal">
-                  {role.hint}
+                <p className="text-xs text-slate-300 font-medium leading-tight">
+                  {activeRoleData.hint}
                 </p>
                 <button
                   onClick={fillCredentials}
                   className="text-[10px] uppercase tracking-wider text-teal-400 font-bold mt-1.5 hover:text-teal-300 transition-colors"
                 >
-                  Auto-fill Credentials
+                  Auto-fill {activeRoleData.label} Credentials
                 </button>
               </div>
             </div>
