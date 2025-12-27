@@ -2,9 +2,11 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import sequelize, { connectDB } from "./config/db.js";
+import sequelize, { connectDB } from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import equipmentRoutes from "./routes/equipmentRoutes.js";
 import maintenanceRoutes from "./routes/maintenanceRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 
 import User from "./models/User.js";
@@ -30,12 +32,18 @@ Maintenance.belongsTo(Equipment, {
   foreignKey: "equipmentId",
   as: "equipment",
 });
+Maintenance.belongsTo(User, { foreignKey: "technicianId", as: "technician" });
+Maintenance.belongsTo(Equipment, {
+  foreignKey: "equipmentId",
+  as: "equipment",
+});
 User.hasMany(Maintenance, { foreignKey: "technicianId" });
 Equipment.hasMany(Maintenance, { foreignKey: "equipmentId" });
 
 app.use("/api/auth", authRoutes);
 app.use("/api/equipment", equipmentRoutes);
 app.use("/api/maintenance", maintenanceRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
 const PORT = process.env.PORT || 5000;
