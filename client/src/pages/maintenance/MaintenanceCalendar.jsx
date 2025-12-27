@@ -29,7 +29,7 @@ export default function MaintenanceCalendar() {
 
 const role = user.role.toLowerCase();
 
-if (role !== "admin") {
+if (role !== "manager") {
   return (
     <div className="text-center text-red-400 font-bold">
       Unauthorized Access
